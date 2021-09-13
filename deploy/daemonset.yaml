@@ -1,0 +1,37 @@
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: metadata-service
+  namespace: metadata-service
+spec:
+  selector:
+    matchLabels:
+      k8s-app: metadata-service
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        k8s-app: metadata-service
+    spec:
+      nodeSelector:
+        node-role.kubernetes.io/worker: ""
+      restartPolicy: Always
+      serviceAccountName: privileged-sa
+      containers:
+        - resources:
+            requests:
+              cpu: 50m
+              memory: 70Mi
+          terminationMessagePath: /dev/termination-log
+          name: metadata-service
+          ports:
+            - name: metadata-service
+              containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          image: <image-replace>
+          env:
+            - name: APP_CONFIG
+              value: "gunicorn.conf"
+            - name: APP_MODULE
+              value: "main:app"

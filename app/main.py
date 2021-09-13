@@ -51,7 +51,7 @@ app = FastAPI()
 # Declate metadata as the Cloudmetadata Application we will return
 metadata = CloudMetadata()
 
-#TO-DO Streamline determine functions into 1 
+#TO-DO Streamline determine functions into 1(Probably a custom decorator)
 async def determine_azure():
     '''entry to determine metadata'''
     logger.info("Starting determine_azure() Function")
@@ -92,12 +92,14 @@ determine_cloud_functions_list = [
 @app.get("/")
 async def read_root():
     '''Application'''
+    logger.info("Called / url")
     return {"Application": "Cloud Metadata Application,Open /docs for API information"}
 
 
 @app.get("/metadata/")
 async def determine_metadata(q: Optional[str] = None):
     '''determine cloud'''
+    logger.info("/metadata path was called")
     if metadata.cloudname == "unknown":
         result = False
         if q is None:

@@ -18,7 +18,7 @@ COPY ./deploy/gunicorn.conf /app/
 WORKDIR /app
 
 # Install App Dependecies
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 
 #Expose Ports
 EXPOSE 8080/tcp

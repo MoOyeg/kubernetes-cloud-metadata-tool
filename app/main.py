@@ -92,7 +92,7 @@ determine_cloud_functions_list = [
 @app.on_event("startup")
 async def startup_event():
     '''Startup Function'''
-    logger.info("Opening mols bakery...")
+    logger.info("Starting up Metadata Service")
     global instance_hostname  # pylint: disable=global-statement
     # Get environment variables
     redis_url = getenv('REDIS_URL')
@@ -105,7 +105,7 @@ async def startup_event():
 @app.get("/")
 async def read_root():
     '''Application'''
-    logger.info("Called / url")
+    logger.info("Root Url '/' was Called")
     return {"Application": "Cloud Metadata Application,Open /docs for API information"}
 
 

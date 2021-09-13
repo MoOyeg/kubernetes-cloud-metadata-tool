@@ -124,6 +124,7 @@ async def determine_metadata(q: Optional[str] = None):
                     metadata.hostname = response_data["hostname"]
                     metadata.region = response_data["region"]
                     metadata.availability_zone = response_data["availability_zone"]
+                    break
             return metadata.todict()
     else:
         return metadata.todict()

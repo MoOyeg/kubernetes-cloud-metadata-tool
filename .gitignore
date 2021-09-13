@@ -5,3 +5,4 @@ app/__pycache__/utility_aws.cpython-36.pyc
 app/__pycache__/utility_azure.cpython-36.pyc
 app/__pycache__/utility_gcp.cpython-36.pyc
 app/.env
+deploy/__pycache__/gunicorn.cpython-36.pyc

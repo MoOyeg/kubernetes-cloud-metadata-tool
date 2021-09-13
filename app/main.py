@@ -4,22 +4,21 @@ Version 1: Prototype
 Module runs in a kubernetes based environment and trys determine cloud metadata information for Applications.
 Module does this by accessing cloud metadata urls for access.
 Module is meant to be run as a deamonset on every node in the cluster.
-Since each instance of the module is accessing only data for it's own node we depend on topologykeys to make sure 
+
+Runs in 2 Ways
+- Since each instance of the module is accessing only data for it's own node we depend on topologykeys to make sure 
 a pod accesses the instance of the service running on it's own node.
+- Pass in the hostname of your pod to
 '''
 
 from asyncio import get_event_loop
 from concurrent.futures import ThreadPoolExecutor
 from logging import getLogger, config
+from os import getenv
+#from redis import init_redis_pool
 from pydantic import BaseModel  # pylint: disable=import-error
 from typing import Optional  # pylint: disable=import-error
 from fastapi import FastAPI  # pylint: disable=import-error
-
-
-# # Get environment variables
-# USER = os.getenv('API_USER')
-# PASSWORD = os.environ.get('API_PASSWORD')
-
 
 class CloudMetadata(BaseModel):  # pylint: disable=too-few-public-methods
     '''Class For CloudMetadata'''
@@ -41,15 +40,16 @@ class CloudMetadata(BaseModel):  # pylint: disable=too-few-public-methods
 
 # setup loggers
 config.fileConfig('logging.conf', disable_existing_loggers=False)
-
-# get root logger
-logger = getLogger(__name__)
+logger = getLogger("logger_root")
 
 # Declare App as a FastApi Object
 app = FastAPI()
 
 # Declate metadata as the Cloudmetadata Application we will return
 metadata = CloudMetadata()
+
+#Instance Hostname is global
+instance_hostname = ""
 
 #TO-DO Streamline determine functions into 1(Probably a custom decorator)
 async def determine_azure():
@@ -87,6 +87,19 @@ async def determine_gcp():
 # Clouds that have metadata scripts available
 determine_cloud_functions_list = [
     determine_aws, determine_azure, determine_gcp]
+
+#Get Startup Information
+@app.on_event("startup")
+async def startup_event():
+    '''Startup Function'''
+    logger.info("Opening mols bakery...")
+    global instance_hostname  # pylint: disable=global-statement
+    # Get environment variables
+    redis_url = getenv('REDIS_URL')
+    instance_hostname = getenv('HOSTNAME')
+   
+    # PASSWORD = os.environ.get('API_PASSWORD')
+    #app.state.redis = await init_redis_pool()
 
 
 @app.get("/")

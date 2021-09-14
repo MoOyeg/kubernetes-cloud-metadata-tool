@@ -4,18 +4,14 @@ Version 1: Prototype
 Module runs in a kubernetes based environment and trys determine cloud metadata information for Applications.
 Module does this by accessing cloud metadata urls for access.
 Module is meant to be run as a deamonset on every node in the cluster.
-
-Runs in 2 Ways
-- Since each instance of the module is accessing only data for it's own node we depend on topologykeys to make sure 
+Since each instance of the module is accessing only data for it's own node we depend on topologykeys to make sure 
 a pod accesses the instance of the service running on it's own node.
-- Pass in the hostname of your pod to
 '''
 
 from asyncio import get_event_loop
 from concurrent.futures import ThreadPoolExecutor
 from logging import getLogger, config
 from os import getenv
-#from redis import init_redis_pool
 from pydantic import BaseModel  # pylint: disable=import-error
 from typing import Optional  # pylint: disable=import-error
 from fastapi import FastAPI  # pylint: disable=import-error
@@ -95,9 +91,9 @@ async def startup_event():
     logger.info("Starting up Metadata Service")
     global instance_hostname  # pylint: disable=global-statement
     # Get environment variables
-    redis_url = getenv('REDIS_URL')
-    instance_hostname = getenv('HOSTNAME')
-   
+    #TO-DO Integrate redis
+    #redis_url = getenv('REDIS_URL')
+    instance_hostname = getenv('HOSTNAME') 
     # PASSWORD = os.environ.get('API_PASSWORD')
     #app.state.redis = await init_redis_pool()
 

@@ -1,0 +1,35 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: kubernetes-cloud-metadata-tool
+  namespace: metadata-service
+  labels:
+    build: kubernetes-cloud-metadata-tool
+spec:
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'kubernetes-cloud-metadata-tool:latest'
+  resources: {}
+  successfulBuildsHistoryLimit: 5
+  failedBuildsHistoryLimit: 5
+  strategy:
+    type: Docker
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: 'centos:latest'
+  postCommit: {}
+  source:
+    type: Git
+    git:
+      uri: 'https://github.com/MoOyeg/kubernetes-cloud-metadata-tool.git'
+      ref: working
+  triggers:
+    - type: ConfigChange
+    - type: ImageChange
+      imageChange:
+        lastTriggeredImageID: >-
+          docker.io/centos@sha256:e4ca2ed0202e76be184e75fb26d14bf974193579039d5573fb2348664deef76e
+

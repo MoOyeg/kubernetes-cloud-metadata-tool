@@ -1,0 +1,25 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: test-metadata-pod
+  namespace: metadata-service
+spec:
+  restartPolicy: Never
+  containers:
+    - resources:
+        requests:
+          cpu: 50m
+          memory: 70Mi
+      name: ubi8
+      command:
+        - /bin/bash
+        - '-c'
+      env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: spec.nodeName
+      image: docker.io/centos@sha256:e4ca2ed0202e76be184e75fb26d14bf974193579039d5573fb2348664deef76e
+      args:
+        - "curl -L -s -k http://$NODE_NAME:8080/metadata"

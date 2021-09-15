@@ -97,7 +97,6 @@ async def startup_event():
     # PASSWORD = os.environ.get('API_PASSWORD')
     #app.state.redis = await init_redis_pool()
 
-
 @app.get("/")
 async def read_root():
     '''Application'''
@@ -119,13 +118,9 @@ async def determine_metadata(q: Optional[str] = None):
                     metadata.cloudname = result[2]
                     metadata.hostname = response_data["hostname"]
                     metadata.region = response_data["region"]
+                    metadata.region = response_data["instanceType"]
                     metadata.availability_zone = response_data["availability_zone"]
                     break
             return metadata.todict()
     else:
         return metadata.todict()
-
-
-# @app.put("/items/{item_id}")
-# async def update_item(item_id: int, item: CloudMetadata):
-#     return {"item_name": item.name, "item_id": item_id}

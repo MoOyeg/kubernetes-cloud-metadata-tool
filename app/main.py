@@ -128,4 +128,4 @@ async def determine_metadata(q: Optional[str] = None):
                     break
             return JSONResponse(metadata.todict())
     else:
-        return metadata.todict()
+        return JSONResponse(metadata.todict())

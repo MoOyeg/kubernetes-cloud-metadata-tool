@@ -8,3 +8,5 @@ app/.env
 deploy/__pycache__/gunicorn.cpython-36.pyc
 __pycache__/run.cpython-36.pyc
 *.pyc
+__pycache__/run.cpython-36.pyc
+app/__pycache__/__init__.cpython-36.pyc

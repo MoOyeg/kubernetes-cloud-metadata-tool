@@ -123,7 +123,7 @@ async def determine_metadata(q: Optional[str] = None):
                     metadata.cloudname = result[2]
                     metadata.hostname = response_data["hostname"]
                     metadata.region = response_data["region"]
-                    metadata.region = response_data["instanceType"]
+                    metadata.instance_type = response_data["instanceType"]
                     metadata.availability_zone = response_data["availability_zone"]
                     break
             return JSONResponse(metadata.todict())

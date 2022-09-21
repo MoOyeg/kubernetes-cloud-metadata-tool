@@ -9,7 +9,7 @@ Tool runs as a daemonset on every worker node on the cluster. At the moment it d
 To access the service you can use:
 
 - Access Pod endpoints directly.  
-  Get the Node Name from the downwardAPI and call the port of the tool(presently set at 8080, but can be reconfigured).
+  Get the Node Name from the downwardAPI and call the port of the tool(presently set at 16261, but can be reconfigured).
 
 - Access Kubernetes Service with Topology Awareness.  
    1  Create a Kubernetes service and use "internalTrafficPolicy: Local" on the service. Requires enable feature-request <https://kubernetes.io/docs/concepts/services-networking/service-traffic-policy/>.  
@@ -25,9 +25,6 @@ To access the service you can use:
 - Change directory into cloned repo and Create Namespace metadata-service  
   ```oc create -f ./deploy/namespace.yaml```
 
-- Create BuildConfig to create image  
-  ```oc create -f ./deploy/buildconfig.yaml -n metadata-service```
-
 - Create privileged Service Account  
   ```oc create -f ./deploy/privileged-sa.yaml -n metadata-service```
 
@@ -37,8 +34,8 @@ To access the service you can use:
 - Add edit permissions to privileged-sa  
   ```oc create -f ./deploy/rolebinding-privileged.yaml -n metadata-service```
 
-- Create Daemonset, replace image with internal built image  
-  ```cat ./deploy/daemonset.yaml | sed 's*<image-replace>*image-registry.openshift-image-registry.svc:5000/metadata-service/kubernetes-cloud-metadata-tool:latest*' | oc create -f - -n metadata-service```
+- Create Daemonset
+  ```cat ./deploy/daemonset.yaml | oc create -f - -n metadata-service```
 
 - To run a sample  
   ```oc create -f ./deploy/test-pod.yaml -n metadata-service && while [ $(oc get pod/test-metadata-pod -n metadata-service -o jsonpath="{.status.phase}") != "Succeeded" ];do echo "Waiting For Pod to Complete" && sleep 1;done && echo -e "\n" && oc logs -f pod/test-metadata-pod -n metadata-service && echo -e "\n"; oc delete pod/test-metadata-pod -n metadata-service```
@@ -50,9 +47,6 @@ To access the service you can use:
 
 - Change directory into cloned repo and Create Namespace metadata-service  
   ```oc create -f ./deploy/namespace.yaml```
-
-- Build Dockerfile with any tool you choose .e.g  
-  ```podman build ./ -t metadata-tool```
 
 - Push image to repository of choice
 
@@ -71,8 +65,8 @@ To access the service you can use:
 - Add edit permissions to privileged-sa  
   ```oc create -f ./deploy/rolebinding-privileged.yaml -n metadata-service```
 
-- Create Daemonset, replace image with your own built image,also nodeselector might be different in your case  
-  ```cat ./deploy/daemonset.yaml | sed 's*<image-replace>*quay.io/mooyeg/metadata-tool:latest*' | sed 's*node-role.kubernetes.io/worker*node-role.kubernetes.io/node*' | oc create -f - -n metadata-service```
+- Create Daemonset
+  ```cat ./deploy/daemonset.yaml | oc create -f - -n metadata-service```
 
 - To run a sample  
   ```oc create -f ./deploy/test-pod.yaml -n metadata-service && while [ $(oc get pod/test-metadata-pod -n metadata-service -o jsonpath="{.status.phase}") != "Succeeded" ];do echo "Waiting For Pod to Complete" && sleep 1;done && echo -e "\n" && oc logs -f pod/test-metadata-pod -n metadata-service && echo -e "\n"; oc delete pod/test-metadata-pod -n metadata-service```

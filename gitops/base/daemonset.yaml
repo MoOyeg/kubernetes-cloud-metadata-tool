@@ -13,10 +13,8 @@ spec:
       labels:
         k8s-app: metadata-service
     spec:
-      nodeSelector:
-        node-role.kubernetes.io/worker: ""
       restartPolicy: Always
-      serviceAccountName: privileged-sa
+      serviceAccountName: privileged-metadata-sa
       hostNetwork: true
       containers:
         - resources:
@@ -29,7 +27,8 @@ spec:
             - name: metadata
               containerPort: 16261
               protocol: TCP
-          imagePullPolicy: IfNotPresent
+          # imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           image: quay.io/mooyeg/metadata-tool:1.0
           env:
             - name: APP_CONFIG

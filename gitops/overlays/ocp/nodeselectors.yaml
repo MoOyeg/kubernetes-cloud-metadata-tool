@@ -1,0 +1,13 @@
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: metadata-service
+  namespace: metadata-service
+spec:
+  selector:
+    matchLabels:
+      k8s-app: metadata-service
+  template:
+    spec:
+      nodeSelector:
+        node-role.kubernetes.io/worker: ""

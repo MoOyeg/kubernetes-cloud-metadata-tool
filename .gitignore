@@ -6,3 +6,13 @@ app/__pycache__/utility_azure.cpython-36.pyc
 app/__pycache__/utility_gcp.cpython-36.pyc
 app/.env
 deploy/__pycache__/gunicorn.cpython-36.pyc
+__pycache__/run.cpython-36.pyc
+*.pyc
+__pycache__/run.cpython-36.pyc
+app/__pycache__/__init__.cpython-36.pyc
+__pycache__/run.cpython-36.pyc
+.vscode/
+
+
+
+cat ./deploy/daemonset.yaml | sed 's*<image-replace>*image-registry.openshift-image-registry.svc:5000/metadata-service/kubernetes-cloud-metadata-tool:latest*' | oc create -f - -n metadata-service

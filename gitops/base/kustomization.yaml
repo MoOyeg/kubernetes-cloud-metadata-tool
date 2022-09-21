@@ -1,0 +1,7 @@
+resources:
+- namespace.yaml
+- privileged-sa.yaml
+- rolebinding-privileged.yaml
+- service.yaml
+- daemonset.yaml
+

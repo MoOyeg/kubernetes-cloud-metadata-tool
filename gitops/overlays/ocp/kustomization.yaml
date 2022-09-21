@@ -1,0 +1,6 @@
+bases:
+- ../../base
+resources:
+  - clusterrolebinding-scc.yaml
+patchesStrategicMerge:
+- nodeselectors.yaml

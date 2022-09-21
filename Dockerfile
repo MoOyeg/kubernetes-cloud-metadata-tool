@@ -1,11 +1,12 @@
-FROM docker.io/centos@sha256:e4ca2ed0202e76be184e75fb26d14bf974193579039d5573fb2348664deef76e
+FROM registry.access.redhat.com/ubi8:8.6-943
 
 #ENV Variables
 ENV APP_MODULE main:app
 ENV APP_CONFIG gunicorn.conf
 
 # Install the required software
-RUN yum update -y && yum install git python3 pip3 -y
+RUN yum update -y && yum install -y git python38 python38-pip && \
+    yum remove python36
 
 #Make Application Directory
 RUN mkdir /app && cd /app
@@ -21,7 +22,7 @@ WORKDIR /app
 RUN pip3 install -r requirements.txt
 
 #Expose Ports
-EXPOSE 8080/tcp
+EXPOSE 16261/tcp
 
 #Change Permissions to allow not root-user work
 RUN chmod -R g+rw ./
